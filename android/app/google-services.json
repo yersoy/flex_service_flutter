@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "317804558511",
+    "firebase_url": "https://ritmaservisapp.firebaseio.com",
+    "project_id": "ritmaservisapp",
+    "storage_bucket": "ritmaservisapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317804558511:android:3bce5cd1def06a91",
+        "android_client_info": {
+          "package_name": "com.ritmateknoloji.servicemobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317804558511-ap5pdgo4tsfrnqtllk43jm0vvmi9ajna.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGF0fBnEWF0FbdQ69gsi7h988i7T8pWRw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
