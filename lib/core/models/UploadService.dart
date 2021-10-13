@@ -157,7 +157,7 @@ class ListProductSimple {
   int productId;
   String productCode;
   String productName;
-  dynamic quantity;
+  double quantity;
   // dynamic unit;
   bool productIsAdded;
   int inUsage;

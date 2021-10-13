@@ -149,11 +149,11 @@ class Services {
             body: json.encode(newmodel))
         .then((value) {
       if (json.decode(value.body)["Success"] == true) {
-        print(json.encode(value.body));
-        Utils.showAuthedSnack(context, "Yeni Ürün Başarıyla Eklendi!");
+        print(value.body);
+
         CustomerDeviceList newservice = CustomerDeviceList();
         CustomerProductServer data =
-            CustomerProductServer.fromJson(json.decode(value.body));
+            CustomerProductServer.fromJson(json.decode(value.body)["Data"]);
         LocalDB.getDefaults().then((value) {
           newservice.customerProductId = data.customerProductId;
           newservice.customerProductSerialNumber = newmodel.serialNumber;
@@ -167,6 +167,7 @@ class Services {
               value.data.serviceOperationTypeList;
           service.customerInfo.customerDeviceList.add(newservice);
         });
+        Utils.showAuthedSnack(context, "Yeni Ürün Başarıyla Eklendi!");
         return service;
       } else {
         Utils.showAuthedSnack(context,
@@ -316,6 +317,7 @@ class Services {
             prod.productIsAdded = true;
             prod.productName = item.productName;
             prod.quantity = item.quantity;
+
             prod.inUsage = 1;
 
             uploadservice.productList.add(prod);

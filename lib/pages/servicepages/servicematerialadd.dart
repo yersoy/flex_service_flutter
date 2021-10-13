@@ -63,7 +63,7 @@ class _MaterialAddState extends State<MaterialAdd>
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                     ],
                     onFieldSubmitted: (text) {
-                      product.productCount = int.parse(text);
+                      product.quantity = double.parse(text);
                       this.widget.data.serviceProductList.add(product);
                       LocalDB.saveService(
                               this.widget.data.serviceInfo.serviceId.toString(),
@@ -125,7 +125,7 @@ class _MaterialAddState extends State<MaterialAdd>
                               ServiceProductList product =
                                   new ServiceProductList(
                                 productId: stock.productId,
-                                quantity: stock.quantity,
+                                quantity: double.parse(text),
                                 productCount: int.parse(text),
                                 productName: stock.productName,
                                 productSalePrice: stock.productSalePrice,
@@ -141,7 +141,13 @@ class _MaterialAddState extends State<MaterialAdd>
                                     stock.productSaleMoneyType,
                               );
 
-                              this.widget.data.serviceProductList.add(product);
+                              setState(() {
+                                this
+                                    .widget
+                                    .data
+                                    .serviceProductList
+                                    .add(product);
+                              });
                               LocalDB.saveService(
                                       this
                                           .widget
