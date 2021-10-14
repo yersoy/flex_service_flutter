@@ -102,7 +102,7 @@ class LocalDB {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String s = await prefs.getString("uploaded");
     List<dynamic> data;
-    if (s.isNotEmpty) {
+    if (s != null) {
       data = json.decode(s);
       if (data.contains(id)) {
         return data;

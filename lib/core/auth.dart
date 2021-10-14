@@ -21,7 +21,12 @@ class Authorization {
     loginuri = ssl == true
         ? Uri.https(server, Constants.loginPath)
         : Uri.http(server, Constants.loginPath);
-    String token = await FCM.getToken();
+    String token = await FCM.getToken(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(child: CircularProgressIndicator()),
+    );
     return await http
         .post(loginuri,
             body: LoginParams(
@@ -35,8 +40,11 @@ class Authorization {
           new AccountDetails.fromJson(jsonDecode(value.body));
       if (details.success == true) {
         await LocalDB.setUser(value.body.toString());
+        Navigator.of(context).pop();
         Navigator.pushReplacementNamed(context, "");
-        Utils.showAuthedSnack(context, "Başarıyla Giriş Yapıldı!");
+        Future.delayed(Duration(seconds: 1), () {
+          Utils.showAuthedSnack(context, "Başarıyla Giriş Yapıldı!");
+        });
       }
       print(value.body.toString());
       Utils.showDefaultSnack(context, "Kullancı adı veya Şifre Yanlış");

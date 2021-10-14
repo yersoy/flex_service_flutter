@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage>
                 child: Image(
                   width: 300,
                   fit: BoxFit.fill,
-                  image: const AssetImage('assets/images/logo_2x.png'),
+                  image: const AssetImage('assets/images/logo_white.png'),
                 ),
               ),
               SizedBox(

@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flexserviceflutter/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 class FCM {
   static Future<bool> getPermission() async {
@@ -27,8 +29,15 @@ class FCM {
     });
   }
 
-  static getToken() {
+  static Future<String> getToken(context) {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
+    FirebaseMessaging.onMessage.listen((message) {
+      print('Got a message whilst in the foreground!');
+
+      if (message.notification != null) {
+        Utils.showAuthedSnack(context, message.notification?.title);
+      }
+    });
     return messaging.getToken().then((value) {
       return value;
     });
