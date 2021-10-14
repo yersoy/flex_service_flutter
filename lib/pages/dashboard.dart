@@ -276,10 +276,10 @@ class _DashboardState extends State<Dashboard>
                         unselectedLabelColor: Colors.grey,
                         tabs: [
                           Tab(
-                            text: "Servisler (" + loflist.toString() + ")",
+                            text: "Servisler ",
                           ),
                           Tab(
-                            text: "Yüklemeyi Bekleyen (0)",
+                            text: "Yüklemeyi Bekleyen ",
                           ),
                         ],
                       ),

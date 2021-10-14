@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flexserviceflutter/core/models/AccountModel.dart';
+import 'package:flexserviceflutter/core/models/CustomerListModel.dart';
 import 'package:flexserviceflutter/core/models/ProductFromInvoice.dart';
 import 'package:flexserviceflutter/core/models/ProductFromList.dart';
 import 'package:flexserviceflutter/core/models/ServiceDefaults.dart';
@@ -288,7 +289,7 @@ class Services {
   }
 
   static Future<Response> uploadService(
-      int serviceId, ServiceList service) async {
+      int serviceId, ServiceList service, bool net) async {
     String server = await LocalDB.getServer();
     bool ssl = await LocalDB.getSsl();
     Uri uri = ssl == true
@@ -346,14 +347,35 @@ class Services {
           uploadservice.serviceTemplateFileName = "";
           uploadservice.taskId = 1;
 
-          Clipboard.setData(ClipboardData(text: json.encode(uploadservice)));
-          return await http.post(
-            uri,
-            headers: {"Content-Type": "application/json"},
-            body: json.encode(uploadservice),
-          );
+          if (net) {
+            return await http.post(
+              uri,
+              headers: {"Content-Type": "application/json"},
+              body: json.encode(uploadservice),
+            );
+          }
+          await LocalDB.saveUploadService(serviceId.toString(), uploadservice);
+          return null;
         });
       });
+    });
+  }
+
+  static Future<List<CustomerList>> searchInCustomer(String searchText) async {
+    String server = await LocalDB.getServer();
+    bool ssl = await LocalDB.getSsl();
+    Uri uri = ssl == true
+        ? Uri.https(server, Constants.searchInCustomer)
+        : Uri.http(server, Constants.searchInCustomer);
+    return await http
+        .post(uri,
+            headers: {"Content-Type": "application/json"},
+            body: json.encode(new ServiceGlobalParams(searchText: searchText)))
+        .then((value) {
+      CustomerListModel data =
+          new CustomerListModel.fromJson(json.decode(value.body));
+      print(value.body);
+      return data.data.customerList;
     });
   }
 }

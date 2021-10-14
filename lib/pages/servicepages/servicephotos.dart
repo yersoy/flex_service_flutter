@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flexserviceflutter/core/localdb.dart';
+import 'package:flexserviceflutter/shared/Stories.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '/core/models/ServiceModel.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +22,54 @@ class _ServicePhotosState extends State<ServicePhotos> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Container(
+          height: 270,
+          child: Card(
+            elevation: 0,
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+                    final XFile image =
+                        await _picker.pickImage(source: ImageSource.gallery);
+                    int lenght = this.widget.data.servicePhotoList.length >= 0
+                        ? this.widget.data.servicePhotoList.length
+                        : 0;
+
+                    await image.readAsBytes().then((value) async {
+                      if (value.isNotEmpty) {
+                        Uint8List idata = value;
+                        setState(() {
+                          this.widget.data.servicePhotoList.add(
+                                Photo(
+                                    photoID: lenght,
+                                    photoBase64Str: base64.encode(idata),
+                                    photoExtension: ".jpg",
+                                    photoFilePath: ""),
+                              );
+                        });
+
+                        await LocalDB.saveService(
+                            this.widget.data.serviceInfo.serviceId.toString(),
+                            this.widget.data);
+                      }
+                    });
+                  },
+                  child: StoriesScreen(
+                    userName: "Yeni Resim Ekle",
+                    first: true,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
         for (var photo in this.widget.data.servicePhotoList)
           Card(
             child: Column(
               children: [
-                SizedBox(
-                  height: 5,
-                ),
                 Column(
                   children: [
                     ListTile(
@@ -56,15 +101,6 @@ class _ServicePhotosState extends State<ServicePhotos> {
                   height: 15,
                 )
               ],
-            ),
-          ),
-        if (this.widget.data.servicePhotoList.length == 0)
-          Padding(
-            padding: EdgeInsets.all(15),
-            child: Card(
-              child: ListTile(
-                title: Text("Fotoğraf Bulunamadı"),
-              ),
             ),
           ),
       ],

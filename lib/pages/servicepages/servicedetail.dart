@@ -64,16 +64,62 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        ListTile(
-          leading: Container(
-            padding: EdgeInsets.only(top: 10, left: 5),
-            child: Icon(FontAwesomeIcons.mapMarkerAlt),
+        SizedBox(
+          height: 15,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10),
+          child: ListTile(
+            title: Text(
+              "Konu",
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
+            ),
+            subtitle: Text(this.widget.data.serviceInfo.serviceSubject),
           ),
-          title: this.widget.data.customerInfo.customerPhone != null
-              ? Text(this.widget.data.customerInfo.customerPhone)
-              : null,
-          subtitle: Text(this.widget.data.customerInfo.address),
-          isThreeLine: true,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10),
+          child: ListTile(
+            title: Text(
+              "Adres",
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
+            ),
+            subtitle: Text(this.widget.data.customerInfo.address),
+            isThreeLine: true,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 10),
+          child: ListTile(
+            subtitle: this.widget.data.customerInfo.customerPhone != null
+                ? Text(
+                    this.widget.data.customerInfo.customerPhone,
+                  )
+                : null,
+            title: Text(
+              "Telefon Numarası",
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
+            ),
+            trailing: TextButton(
+              child: Text("ARA"),
+              onPressed: () {},
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
         ),
         DataTable(
           columns: <DataColumn>[
@@ -131,10 +177,6 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
                   ],
                 ),
           ],
-        ),
-        ListTile(
-          title: Text("Konu"),
-          subtitle: Text(this.widget.data.serviceInfo.serviceSubject),
         ),
         ListTile(
           title: Text("Servis Konumu"),

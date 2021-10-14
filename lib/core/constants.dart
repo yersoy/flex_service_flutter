@@ -19,4 +19,5 @@ class Constants {
       "/api/ServiceNew/GetProductListOnPersonnelWarehouse";
   static String stockActivityList = "/api/Stock/GetStockAndStockActivitiyList";
   static String getAllUserStateList = "/api/ServiceNew/GetAllUserStateList";
+  static String searchInCustomer = "/api/ServiceNew/GetCustomerList";
 }

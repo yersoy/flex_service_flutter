@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flexserviceflutter/core/localdb.dart';
 import 'package:flexserviceflutter/core/models/ServiceModel.dart';
 import 'package:flexserviceflutter/utils/utils.dart';
@@ -94,63 +95,72 @@ class _SignPageState extends State<SignPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: false,
-        title: Text('Lütfen İmzalayın'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.clear),
-            onPressed: () => _paths.clear(),
-            color: Colors.white,
-          ),
-          IconButton(
-            icon: Icon(Icons.save),
-            color: Colors.white,
-            onPressed: () async {
-              final img = await rendered;
-              final pngBytes =
-                  await img.toByteData(format: ui.ImageByteFormat.png);
+        appBar: AppBar(
+          backgroundColor: Colors.blue,
+          automaticallyImplyLeading: false,
+          title: Text('Lütfen İmzalayın'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () => _paths.clear(),
+              color: Colors.white,
+            ),
+            IconButton(
+              icon: Icon(Icons.save),
+              color: Colors.white,
+              onPressed: () async {
+                final img = await rendered;
+                final pngBytes =
+                    await img.toByteData(format: ui.ImageByteFormat.png);
 
-              setState(() {
-                imgBytes = pngBytes;
-              });
+                setState(() {
+                  imgBytes = pngBytes;
+                });
 
-              _showImage();
-            },
-          ),
-        ],
-      ),
-      body: Container(
-        child: GestureDetector(
-          onPanStart: (DragStartDetails details) {
-            setState(() {
-              RenderBox box = context.findRenderObject();
-              Offset _localPosition = box.globalToLocal(details.globalPosition);
-              _localPosition = _localPosition.translate(
-                  0.0, -(AppBar().preferredSize.height + 20));
-              Path path = new Path();
-              path.moveTo(_localPosition.dx, _localPosition.dy);
-              _paths = List.from(_paths)..add(new Path.from(path));
-            });
-          },
-          onPanUpdate: (DragUpdateDetails details) {
-            setState(() {
-              RenderBox box = context.findRenderObject();
-              Offset _localPosition = box.globalToLocal(details.globalPosition);
-              _localPosition = _localPosition.translate(
-                  0.0, -(AppBar().preferredSize.height + 20));
-              Path path = _paths.last;
-              path.lineTo(_localPosition.dx, _localPosition.dy);
-            });
-          },
-          child: CustomPaint(
-            painter: Signature(paths: _paths),
-            size: Size.infinite,
-          ),
+                _showImage();
+              },
+            ),
+          ],
         ),
-      ),
-    );
+        body: Container(
+          padding: EdgeInsets.all(25),
+          height: 300,
+          child: DottedBorder(
+            color: Colors.black,
+            strokeWidth: 1,
+            child: Container(
+              child: GestureDetector(
+                onPanStart: (DragStartDetails details) {
+                  setState(() {
+                    RenderBox box = context.findRenderObject();
+                    Offset _localPosition =
+                        box.globalToLocal(details.globalPosition);
+                    _localPosition = _localPosition.translate(
+                        0.0, -(AppBar().preferredSize.height + 20));
+                    Path path = new Path();
+                    path.moveTo(_localPosition.dx, _localPosition.dy);
+                    _paths = List.from(_paths)..add(new Path.from(path));
+                  });
+                },
+                onPanUpdate: (DragUpdateDetails details) {
+                  setState(() {
+                    RenderBox box = context.findRenderObject();
+                    Offset _localPosition =
+                        box.globalToLocal(details.globalPosition);
+                    _localPosition = _localPosition.translate(
+                        0.0, -(AppBar().preferredSize.height + 20));
+                    Path path = _paths.last;
+                    path.lineTo(_localPosition.dx, _localPosition.dy);
+                  });
+                },
+                child: CustomPaint(
+                  painter: Signature(paths: _paths),
+                  size: Size.infinite,
+                ),
+              ),
+            ),
+          ),
+        ));
   }
 }
 

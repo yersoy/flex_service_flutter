@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flexserviceflutter/core/models/ServiceModel.dart';
 import 'package:flexserviceflutter/pages/dashboard.dart';
+import 'package:flexserviceflutter/pages/newservicepages/newservice.dart';
 import 'package:flexserviceflutter/pages/userstates.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -33,7 +34,7 @@ class _MainState extends State<Main> {
   }
 
   List<Widget> _buildScreens() {
-    return [Dashboard(), Container(), UserState()];
+    return [Dashboard(), NewService(), UserState()];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {

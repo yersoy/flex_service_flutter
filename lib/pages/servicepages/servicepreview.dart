@@ -15,20 +15,28 @@ class _ServicePreviewState extends State<ServicePreview> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        SizedBox(
+          height: 15,
+        ),
         Container(
-          decoration: BoxDecoration(color: Colors.blue),
+          padding: EdgeInsets.only(left: 10),
           child: ListTile(
             title: Text(
-              this.widget.data.customerInfo.customerName,
-              style: TextStyle(color: Colors.white),
+              "Adres",
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
             ),
-            subtitle: Text(
-              this.widget.data.customerInfo.address,
-              style: TextStyle(color: Colors.white),
-            ),
+            subtitle: Text(this.widget.data.customerInfo.address),
           ),
         ),
+        SizedBox(
+          height: 15,
+        ),
         DataTable(
+          dataRowHeight: 100,
           columns: <DataColumn>[
             DataColumn(
               label: Text(
@@ -73,15 +81,20 @@ class _ServicePreviewState extends State<ServicePreview> {
         ),
         Divider(),
         Container(
-          color: Colors.blue[400],
+          padding: EdgeInsets.only(left: 10),
           child: ListTile(
             title: Text(
               "Servis Verilen Cihazlar",
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
             ),
           ),
         ),
         DataTable(
+          dataRowHeight: 100,
           columns: <DataColumn>[
             DataColumn(
               label: Text(
@@ -109,11 +122,15 @@ class _ServicePreviewState extends State<ServicePreview> {
         ),
         Divider(),
         Container(
-          color: Colors.blue[400],
+          padding: EdgeInsets.only(left: 10),
           child: ListTile(
             title: Text(
-              "İşçilik & Malzemeler",
-              style: TextStyle(color: Colors.white),
+              "İşçilik ve Malzemeler",
+              style: const TextStyle(
+                color: Color(0xFF1777F2),
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1.5,
+              ),
             ),
           ),
         ),

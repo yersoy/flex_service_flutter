@@ -21,14 +21,14 @@ class _ServiceEndState extends State<ServiceEnd> {
   bool loading = false;
 
   var dropdownValue;
-  Future<bool> check() async {
+  void check() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
-      return true;
+      net = true;
     } else if (connectivityResult == ConnectivityResult.wifi) {
-      return true;
+      net = true;
     }
-    return false;
+    net = false;
   }
 
   Future sendService() async {
@@ -38,32 +38,24 @@ class _ServiceEndState extends State<ServiceEnd> {
     LocalDB.getService(this.widget.data.serviceInfo.serviceId.toString())
         .then((value) async {
       await Services.uploadService(
-          this.widget.data.serviceInfo.serviceId, this.widget.data);
-      //     .then((value) {
-      //   print(value.body.toString());
-      //   setState(() {
-      //     loading = false;
-      //   });
-      //   if (json.decode(value.body)["Success"] == true)
-      //     Utils.showAuthedSnack(context, "Başarıyla Kaydedildi");
-      //   if (json.decode(value.body)["Success"] == false)
-      //     Utils.showAuthedSnack(
-      //         context, "Hata : " + json.decode(value.body)["Message"]);
-      // });
-    });
-  }
-
-  Future checkConnection() async {
-    check().then((intenet) {
-      if (intenet != null && intenet) {
-        setState(() {
-          net = true;
-        });
-      } else {
-        setState(() {
-          net = true;
-        });
-      }
+              this.widget.data.serviceInfo.serviceId, this.widget.data, net)
+          .then((value) {
+        if (value != null) {
+          setState(() {
+            loading = false;
+          });
+          if (json.decode(value.body)["Success"] == true)
+            Utils.showAuthedSnack(context, "Başarıyla Kaydedildi");
+          if (json.decode(value.body)["Success"] == false)
+            Utils.showAuthedSnack(
+                context, "Hata : " + json.decode(value.body)["Message"]);
+        } else {
+          Utils.showAuthedSnack(context, "Servis Cihaza Kaydedildi. ");
+          setState(() {
+            loading = false;
+          });
+        }
+      });
     });
   }
 
@@ -71,7 +63,7 @@ class _ServiceEndState extends State<ServiceEnd> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    checkConnection();
+    check();
   }
 
   @override
@@ -81,12 +73,17 @@ class _ServiceEndState extends State<ServiceEnd> {
         if (net == false)
           Column(
             children: [
-              ListTile(
-                title: Text("Servisi Locale Kaydet"),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text("İnternet Bulunamadı"),
+              Container(
+                padding: EdgeInsets.only(top: 25, right: 25, left: 25),
+                child: Card(
+                  child: ListTile(
+                    title: Text("İnternet Bulunamadı"),
+                    trailing: TextButton(
+                        onPressed: () {
+                          sendService();
+                        },
+                        child: Text("Cihaza Kaydet")),
+                  ),
                 ),
               ),
             ],

@@ -93,7 +93,41 @@ class LocalDB {
   static Future<UploadServiceDTO> saveUploadService(
       String id, UploadServiceDTO data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    saveServiceLocal(int.parse(id));
     await prefs.setString("uploadservice" + id, json.encode(data));
+    return data;
+  }
+
+  static Future<List<dynamic>> saveServiceLocal(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String s = await prefs.getString("uploaded");
+    List<dynamic> data;
+    if (s.isNotEmpty) {
+      data = json.decode(s);
+      if (data.contains(id)) {
+        return data;
+      } else {
+        data.add(id);
+        await prefs.setString("uploaded", json.encode(data));
+        return data;
+      }
+    } else {
+      data = <int>[];
+      await prefs.setString("uploaded", json.encode(data));
+      return data;
+    }
+  }
+
+  static Future<List<dynamic>> getServiceLocal(int id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String s = await prefs.getString("uploaded");
+    List<dynamic> data;
+    if (s != null) {
+      data = json.decode(s);
+    } else {
+      data = <dynamic>[];
+    }
+
     return data;
   }
 

@@ -10,6 +10,7 @@ import 'package:flexserviceflutter/pages/servicepages/servicesignature.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicestatus.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicematerials.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicephotos.dart';
+import 'package:flexserviceflutter/shared/AppBarButton.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -58,7 +59,19 @@ class _ServicePageState extends State<ServicePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Servis | " + this.widget.data.customerInfo.customerName),
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Color(0xFF1777F2)),
+        backgroundColor: Colors.white,
+        title: Text(
+          this.widget.data.customerInfo.customerName,
+          style: const TextStyle(
+            color: Color(0xFF1777F2),
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: -1.2,
+          ),
+        ),
+        centerTitle: false,
         actions: <Widget>[
           if (_controller.index == 1)
             IconButton(
@@ -118,26 +131,26 @@ class _ServicePageState extends State<ServicePage>
               },
             ),
         ],
+        bottom: TabBar(
+          labelColor: Color(0xFF1777F2),
+          unselectedLabelColor: Colors.grey,
+          controller: _controller,
+          isScrollable: true,
+          tabs: <Widget>[
+            Tab(text: "Detay"),
+            Tab(text: "Cihazlar"),
+            Tab(text: "Servis"),
+            Tab(text: "Fotoraflar"),
+            Tab(text: "Onay"),
+            Tab(text: "Önizleme"),
+            Tab(text: "İmzalayın"),
+            Tab(text: "Bitir"),
+          ],
+        ),
       ),
       body: Container(
         child: Column(
           children: <Widget>[
-            TabBar(
-              labelColor: Colors.black,
-              indicatorColor: Colors.blue,
-              controller: _controller,
-              isScrollable: true,
-              tabs: <Widget>[
-                Tab(text: "Detay"),
-                Tab(text: "Cihazlar"),
-                Tab(text: "Servis"),
-                Tab(text: "Fotoraflar"),
-                Tab(text: "Onay"),
-                Tab(text: "Önizleme"),
-                Tab(text: "İmzalayın"),
-                Tab(text: "Bitir"),
-              ],
-            ),
             Expanded(
               child: TabBarView(
                 physics: NeverScrollableScrollPhysics(),
