@@ -22,52 +22,25 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   bool net = true;
   Timer timer;
-  Completer<GoogleMapController> _controller = Completer();
-  check() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
-      timer?.cancel();
-      setState(() {
-        net = true;
-      });
-      return;
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      timer?.cancel();
-      setState(() {
-        net = true;
-      });
-      return;
-    }
-    setState(() {
-      net = false;
-    });
-    return;
-  }
 
   init() async {
-    await check();
-    if (net == true) {
-      timer?.cancel();
-      const AndroidNotificationChannel channel = AndroidNotificationChannel(
-        'high_importance_channel', // id
-        'High Importance Notifications', // title
-        description:
-            'This channel is used for important notifications.', // description
-        importance: Importance.max,
-        playSound: true,
-      );
-      final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-          FlutterLocalNotificationsPlugin();
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          .createNotificationChannel(channel);
-      await FCM.initialize();
-      await FCM.getPermission();
-      await LocalDB.isAuthancated(context);
-    } else {
-      timer = Timer.periodic(Duration(seconds: 5), (Timer t) => init());
-    }
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description:
+          'This channel is used for important notifications.', // description
+      importance: Importance.max,
+      playSound: true,
+    );
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        .createNotificationChannel(channel);
+    await FCM.initialize();
+    await FCM.getPermission();
+    await LocalDB.isAuthancated(context);
   }
 
   @override
@@ -78,7 +51,6 @@ class _SplashState extends State<Splash> {
 
   @override
   void dispose() {
-    timer?.cancel();
     super.dispose();
   }
 
@@ -88,23 +60,12 @@ class _SplashState extends State<Splash> {
       backgroundColor: Color(0xff0e1124),
       body: Center(
         child: Container(
-          width: net == false ? MediaQuery.of(context).size.width - 70 : 70,
-          height: 70,
-          child: net == true
-              ? CircularProgressIndicator(
-                  backgroundColor: Colors.blueGrey,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                )
-              : Text(
-                  "İnternet Bağlantısı Gerekiyor",
-                  style: const TextStyle(
-                    color: Color(0xFF1777F2),
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -1.2,
-                  ),
-                ),
-        ),
+            width: net == false ? MediaQuery.of(context).size.width - 70 : 70,
+            height: 70,
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.blueGrey,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            )),
       ),
     );
   }

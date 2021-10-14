@@ -10,7 +10,7 @@ import 'package:flexserviceflutter/core/models/UserState.dart';
 import 'package:flexserviceflutter/pages/userstates.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '/core/localdb.dart';
@@ -289,7 +289,8 @@ class Services {
   }
 
   static Future<Response> uploadService(
-      int serviceId, ServiceList service, bool net) async {
+      int serviceId, ServiceList service) async {
+    bool net = await DataConnectionChecker().hasConnection;
     String server = await LocalDB.getServer();
     bool ssl = await LocalDB.getSsl();
     Uri uri = ssl == true
@@ -353,9 +354,11 @@ class Services {
               headers: {"Content-Type": "application/json"},
               body: json.encode(uploadservice),
             );
+          } else {
+            await LocalDB.saveUploadService(
+                serviceId.toString(), uploadservice);
+            return null;
           }
-          await LocalDB.saveUploadService(serviceId.toString(), uploadservice);
-          return null;
         });
       });
     });

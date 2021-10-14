@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flexserviceflutter/core/localdb.dart';
 import 'package:flexserviceflutter/core/models/ServiceModel.dart';
 import 'package:flexserviceflutter/core/services.dart';
@@ -22,13 +23,12 @@ class _ServiceEndState extends State<ServiceEnd> {
 
   var dropdownValue;
   void check() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile) {
+    var connectivityResult = await DataConnectionChecker().hasConnection;
+    if (connectivityResult) {
       net = true;
-    } else if (connectivityResult == ConnectivityResult.wifi) {
-      net = true;
+    } else {
+      net = false;
     }
-    net = false;
   }
 
   Future sendService() async {
@@ -38,7 +38,7 @@ class _ServiceEndState extends State<ServiceEnd> {
     LocalDB.getService(this.widget.data.serviceInfo.serviceId.toString())
         .then((value) async {
       await Services.uploadService(
-              this.widget.data.serviceInfo.serviceId, this.widget.data, net)
+              this.widget.data.serviceInfo.serviceId, this.widget.data)
           .then((value) {
         if (value != null) {
           setState(() {
@@ -70,25 +70,7 @@ class _ServiceEndState extends State<ServiceEnd> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        if (net == false)
-          Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 25, right: 25, left: 25),
-                child: Card(
-                  child: ListTile(
-                    title: Text("İnternet Bulunamadı"),
-                    trailing: TextButton(
-                        onPressed: () {
-                          sendService();
-                        },
-                        child: Text("Cihaza Kaydet")),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        if (net && loading == false)
+        if (loading == false)
           Column(
             children: [
               SizedBox(
