@@ -5,7 +5,6 @@ import 'package:flexserviceflutter/core/models/ServiceModel.dart';
 import 'package:flexserviceflutter/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
-import 'servicesignature.dart';
 
 class ServiceFinish extends StatefulWidget {
   ServiceList data;
