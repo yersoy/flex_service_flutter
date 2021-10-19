@@ -379,7 +379,14 @@ class _PostButton extends StatelessWidget {
               children: [
                 icon,
                 const SizedBox(width: 4.0),
-                Text(label),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Color(0xFF1777F2),
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5,
+                  ),
+                ),
               ],
             ),
           ),

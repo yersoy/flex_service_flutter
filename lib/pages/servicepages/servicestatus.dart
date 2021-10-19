@@ -40,6 +40,10 @@ class _ServiceStatusState extends State<ServiceStatus> {
         Divider(),
         ListTile(
           subtitle: TextField(
+            textInputAction: TextInputAction.done,
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+            },
             controller: controller,
             onChanged: (text) async {
               await LocalDB.getUploadService(

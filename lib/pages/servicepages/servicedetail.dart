@@ -93,7 +93,10 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
               ),
             ),
             subtitle: Text(this.widget.data.customerInfo.address),
-            isThreeLine: true,
+            trailing: TextButton(
+              child: Icon(Icons.send),
+              onPressed: () {},
+            ),
           ),
         ),
         Container(
@@ -113,7 +116,7 @@ class _ServiceDetailPageState extends State<ServiceDetailPage> {
               ),
             ),
             trailing: TextButton(
-              child: Text("ARA"),
+              child: Icon(Icons.phone),
               onPressed: () {},
             ),
           ),

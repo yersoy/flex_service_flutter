@@ -42,6 +42,9 @@ dependencies:
   syncfusion_flutter_signaturepad: ^19.3.44
   data_connection_checker: ^0.3.4
   signature: ^4.1.1
+  data_table_2: ^2.1.1
+  flutter_svg: ^0.22.0
+  flutter_native_splash: ^1.2.0
 
 dev_dependencies:
  
@@ -63,6 +66,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/service.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

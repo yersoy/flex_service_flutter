@@ -8,7 +8,8 @@ import 'package:signature/signature.dart';
 
 class ServiceFinish extends StatefulWidget {
   ServiceList data;
-  ServiceFinish({Key key, this.data}) : super(key: key);
+  List<Point> sign;
+  ServiceFinish({Key key, this.data, @required this.sign}) : super(key: key);
 
   @override
   _ServiceFinishState createState() => _ServiceFinishState();
@@ -21,6 +22,13 @@ class _ServiceFinishState extends State<ServiceFinish> {
     exportBackgroundColor: Colors.white,
   );
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller.value = this.widget.sign;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
@@ -31,6 +39,7 @@ class _ServiceFinishState extends State<ServiceFinish> {
               await LocalDB.getUploadService(
                       this.widget.data.serviceInfo.serviceId.toString())
                   .then((value) async {
+                this.widget.sign = _controller.value;
                 value.signatureImageBase64Str =
                     base64Encode(await _controller.toPngBytes());
 

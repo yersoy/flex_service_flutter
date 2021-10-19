@@ -1,26 +1,24 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flexserviceflutter/core/localdb.dart';
-import 'package:flexserviceflutter/core/models/ParamModels.dart';
+
 import 'package:flexserviceflutter/pages/servicepages/customerProductAdd.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicend.dart';
 
 import 'package:flexserviceflutter/pages/servicepages/servicestatus.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicematerials.dart';
 import 'package:flexserviceflutter/pages/servicepages/servicephotos.dart';
-import 'package:flexserviceflutter/shared/AppBarButton.dart';
+
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:signature/signature.dart';
 
 import '/core/models/ServiceModel.dart';
 import '/core/services.dart';
 import '/pages/servicepages/servicedetail.dart';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'servicePages/servicefinish.dart';
 import 'servicepages/servicematerialadd.dart';
@@ -38,6 +36,7 @@ class ServicePage extends StatefulWidget {
 class _ServicePageState extends State<ServicePage>
     with SingleTickerProviderStateMixin {
   TabController _controller;
+  List<Point> signdata = new List<Point>();
   int pageIndex;
   @override
   void initState() {
@@ -74,62 +73,95 @@ class _ServicePageState extends State<ServicePage>
         centerTitle: false,
         actions: <Widget>[
           if (_controller.index == 1)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'Yeni Müşteri Ürünü Ekle',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CustomerProductAdd(
-                            data: this.widget.data,
-                          )),
-                );
-              },
+            Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: Color(0xFFe6eef5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                iconSize: 24,
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerProductAdd(
+                              data: this.widget.data,
+                            )),
+                  );
+                },
+              ),
             ),
           if (_controller.index == 2)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'Yeni İşçilik Ekle',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          MaterialAdd(data: this.widget.data)),
-                );
-              },
+            Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: Color(0xFFe6eef5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                iconSize: 24,
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MaterialAdd(data: this.widget.data)),
+                  );
+                },
+              ),
             ),
           if (_controller.index == 3)
-            IconButton(
-              icon: const Icon(Icons.add),
-              tooltip: 'Yeni Fotoraf Ekle',
-              onPressed: () async {
-                final ImagePicker _picker = ImagePicker();
-                final XFile image =
-                    await _picker.pickImage(source: ImageSource.gallery);
-                int lenght = this.widget.data.servicePhotoList.length >= 0
-                    ? this.widget.data.servicePhotoList.length
-                    : 0;
+            Container(
+              height: 40,
+              width: 40,
+              margin: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                color: Color(0xFFe6eef5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.add),
+                iconSize: 24,
+                color: Colors.black,
+                onPressed: () async {
+                  final ImagePicker _picker = ImagePicker();
+                  final XFile image =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  int lenght = this.widget.data.servicePhotoList.length >= 0
+                      ? this.widget.data.servicePhotoList.length
+                      : 0;
 
-                await image.readAsBytes().then((value) async {
-                  Uint8List idata = value;
-                  setState(() {
-                    this.widget.data.servicePhotoList.add(
-                          Photo(
-                              photoID: lenght,
-                              photoBase64Str: base64.encode(idata),
-                              photoExtension: ".jpg",
-                              photoFilePath: ""),
-                        );
+                  await image.readAsBytes().then((value) async {
+                    Uint8List idata = value;
+                    setState(() {
+                      this.widget.data.servicePhotoList.add(
+                            Photo(
+                                photoID: lenght,
+                                photoBase64Str: base64.encode(idata),
+                                photoExtension: ".jpg",
+                                photoFilePath: ""),
+                          );
+                    });
+
+                    await LocalDB.saveService(
+                        this.widget.data.serviceInfo.serviceId.toString(),
+                        this.widget.data);
                   });
-
-                  await LocalDB.saveService(
-                      this.widget.data.serviceInfo.serviceId.toString(),
-                      this.widget.data);
-                });
-              },
+                },
+              ),
             ),
+          SizedBox(
+            width: 10,
+          )
         ],
         bottom: TabBar(
           labelColor: Color(0xFF1777F2),
@@ -162,7 +194,10 @@ class _ServicePageState extends State<ServicePage>
                   ServicePhotos(data: this.widget.data),
                   ServiceStatus(data: this.widget.data),
                   ServicePreview(data: this.widget.data),
-                  ServiceFinish(data: this.widget.data),
+                  ServiceFinish(
+                    data: this.widget.data,
+                    sign: signdata,
+                  ),
                   ServiceEnd(data: this.widget.data),
                 ],
               ),

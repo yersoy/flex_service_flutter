@@ -30,13 +30,6 @@ class _ServiceProductsState extends State<ServiceProducts> {
             myproduct.productName,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-            ),
-            onPressed: () {},
-            child: Text('Düzenle'),
-          ),
         ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -124,10 +117,17 @@ class _ServiceProductsState extends State<ServiceProducts> {
         Padding(
           padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
           child: TextFormField(
+            textInputAction: TextInputAction.done,
             maxLines: null,
             initialValue: myproduct.explain,
             onChanged: (string) {
               myproduct.explain = string;
+            },
+            onEditingComplete: () {
+              FocusScope.of(context).unfocus();
+            },
+            onFieldSubmitted: (text) {
+              FocusScope.of(context).unfocus();
             },
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(
@@ -189,15 +189,27 @@ class _ServiceProductsState extends State<ServiceProducts> {
     return ListView(
       shrinkWrap: true,
       children: [
-        ListTile(
-          title: Text("Servis Verilecek Cihazlar"),
-        ),
+        if (this.widget.data.serviceRelevantProductList.length != 0)
+          ListTile(
+            title: Text("Servis Verilecek Cihazlar"),
+          ),
         if (this.widget.data.serviceRelevantProductList.length == 0)
           Padding(
             padding: EdgeInsets.all(15),
             child: Card(
-              child: ListTile(
-                title: Text("Ürün Bulunamadı"),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(25),
+                  child: Text(
+                    'İlgili Cihaz Girilmemiş',
+                    style: const TextStyle(
+                      color: Color(0xFF1777F2),
+                      fontSize: 28.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: -1.2,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

@@ -20,7 +20,8 @@ class ServiceEnd extends StatefulWidget {
 class _ServiceEndState extends State<ServiceEnd> {
   bool net = false;
   bool loading = false;
-
+  String explain = "";
+  String servicestate = "";
   var dropdownValue;
   void check() async {
     var connectivityResult = await DataConnectionChecker().hasConnection;
@@ -35,9 +36,11 @@ class _ServiceEndState extends State<ServiceEnd> {
     setState(() {
       loading = true;
     });
-    LocalDB.getService(this.widget.data.serviceInfo.serviceId.toString())
+
+    return await LocalDB.getService(
+            this.widget.data.serviceInfo.serviceId.toString())
         .then((value) async {
-      await Services.uploadService(
+      return await Services.uploadService(
               this.widget.data.serviceInfo.serviceId, this.widget.data)
           .then((value) {
         if (value != null) {
@@ -45,7 +48,7 @@ class _ServiceEndState extends State<ServiceEnd> {
             loading = false;
           });
           if (json.decode(value.body)["Success"] == true)
-            Utils.showAuthedSnack(context, "Başarıyla Kaydedildi");
+            Utils.showAuthedSnack(context, "Servis Başarıyla Gönderildi");
           if (json.decode(value.body)["Success"] == false)
             Utils.showAuthedSnack(
                 context, "Hata : " + json.decode(value.body)["Message"]);
@@ -55,6 +58,10 @@ class _ServiceEndState extends State<ServiceEnd> {
             loading = false;
           });
         }
+      }).onError((error, stackTrace) {
+        setState(() {
+          loading = false;
+        });
       });
     });
   }
@@ -64,42 +71,103 @@ class _ServiceEndState extends State<ServiceEnd> {
     // TODO: implement initState
     super.initState();
     check();
+    LocalDB.getUploadService(this.widget.data.serviceInfo.serviceId.toString())
+        .then((value) {
+      LocalDB.getDefaults().then((value) {
+        servicestate = value.data.serviceStateList[0].serviceStateName;
+      });
+      explain = value.explainText;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        SizedBox(
+          height: 15,
+        ),
         if (loading == false)
           Column(
             children: [
-              SizedBox(
-                height: 10,
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Card(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(25),
+                    onTap: () {},
+                    title: Text(
+                      servicestate != null
+                          ? "Servis " + servicestate
+                          : "Servis Durumu Girilmedi",
+                      style: const TextStyle(
+                          color: Color(0xFF1777F2),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5),
+                    ),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(15),
                 child: Card(
                   child: ListTile(
-                    title: Text(this.widget.data.customerInfo.customerName),
-                    subtitle: Text(this.widget.data.serviceDetail.serviceNo),
-                    trailing: TextButton(
-                        onPressed: () {
-                          sendService();
-                        },
-                        child: Text("Servisi Gönder")),
+                    contentPadding: EdgeInsets.all(25),
+                    onTap: () {},
+                    title: Text(
+                      "Servis Açıklaması",
+                      style: const TextStyle(
+                          color: Color(0xFF1777F2),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5),
+                    ),
+                    subtitle:
+                        Text(explain != null ? explain : " Açıklama Girilmedi"),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Card(
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(25),
+                    onTap: () {
+                      sendService();
+                    },
+                    title: Text(
+                      this.widget.data.serviceDetail.serviceNo,
+                      style: const TextStyle(
+                          color: Color(0xFF1777F2),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5),
+                    ),
+                    subtitle: Text("Servisi Gönder"),
+                    trailing: Image.asset(
+                      "assets/images/send.png",
+                      width: 50,
+                      height: 50,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         if (loading)
-          Center(
-            child: Container(
-              width: 70,
-              height: 70,
-              child: CircularProgressIndicator(
-                backgroundColor: Colors.blueGrey,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+              child: Container(
+                width: 140,
+                height: 140,
+                child: CircularProgressIndicator(
+                  strokeWidth: 10,
+                  backgroundColor: Colors.blueGrey,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
               ),
             ),
           ),
