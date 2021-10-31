@@ -1,0 +1,116 @@
+{
+    "Total": 9,
+    "Success": true,
+    "Message": "",
+    "Data": [
+        {
+            "StObjectId": "dtsDeclarationTime",
+            "StObjectType": "datetime",
+            "StLabelText": "Bildirim Tarihi",
+            "StColumnName": "DtDeclarationTime",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "dtsAppointmentTime",
+            "StObjectType": "datetime",
+            "StLabelText": "Randevu Tarihi",
+            "StColumnName": "DtAppointmentTime",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "txtSubject",
+            "StObjectType": "text",
+            "StLabelText": "Konu",
+            "StColumnName": "StSubject",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpExtraColumn1",
+            "StObjectType": "combobox",
+            "StLabelText": "Servis Puanı",
+            "StColumnName": "StExtraColumn1",
+            "StLabelTextShortInformation": null,
+            "BoRequired": true,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpServiceTypeId",
+            "StObjectType": "combobox",
+            "StLabelText": "Servis Tipi",
+            "StColumnName": "InServiceTypeId",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpProjectId",
+            "StObjectType": "combobox",
+            "StLabelText": "Proje",
+            "StColumnName": "InProjectId",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpPersonalId",
+            "StObjectType": "combobox",
+            "StLabelText": "Bizden İlgili",
+            "StColumnName": "InPersonalId",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpPersonal_ServiceMaster",
+            "StObjectType": "combobox",
+            "StLabelText": "Sorumlu",
+            "StColumnName": "StTechnicianName",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        },
+        {
+            "StObjectId": "drpCustomerRelevantName",
+            "StObjectType": "combobox",
+            "StLabelText": "Servisi İleten",
+            "StColumnName": "InCustomerPersonalId",
+            "StLabelTextShortInformation": null,
+            "BoRequired": false,
+            "DtDateValue": "0001-01-01T00:00:00",
+            "StTextValue": null,
+            "BoMultiple": false,
+            "ObjectComboboxOrRadioList": []
+        }
+    ],
+    "Code": 0
+}

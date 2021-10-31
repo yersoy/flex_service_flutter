@@ -8,6 +8,7 @@ import 'package:flexserviceflutter/core/models/ServiceDefaults.dart';
 import 'package:flexserviceflutter/core/models/UploadService.dart';
 import 'package:flexserviceflutter/core/models/UserState.dart';
 import 'package:flexserviceflutter/pages/userstates.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
@@ -19,6 +20,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'constants.dart';
+import 'models/NewServiceModel.dart';
 import 'models/ParamModels.dart';
 import 'models/ProductFormObjects.dart';
 import 'models/ServiceModel.dart';
@@ -380,5 +382,48 @@ class Services {
       print(value.body);
       return data.data.customerList;
     });
+  }
+
+  static Future<MObjectFormDataContainer> getCustomerForm() async {
+    String server = await LocalDB.getServer();
+    bool ssl = await LocalDB.getSsl();
+    Uri uri = ssl == true
+        ? Uri.https(server, Constants.getCustomerForm)
+        : Uri.http(server, Constants.getCustomerForm);
+    return await http.get(uri).then((value) async {
+      MObjectFormDataContainer data =
+          MObjectFormDataContainer.fromJson(json.decode(value.body));
+      return data;
+    });
+  }
+
+  static Future createNewService(context, List<MObjectFormData> data,
+      int customerid, String relevantname) async {
+    String server = await LocalDB.getServer();
+    bool ssl = await LocalDB.getSsl();
+    Uri uri = ssl == true
+        ? Uri.https(server, Constants.createNewService)
+        : Uri.http(server, Constants.createNewService);
+
+    return LocalDB.getUser().then(
+      (value) async {
+        return await http.post(
+          uri,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(
+            new NewServiceModel(
+                rowdata: data,
+                inRecorderId: value.data.userAccountInfo.inRecorderId,
+                inCustomerId: customerid,
+                stCustomerRelevantName: relevantname,
+                inPersonalId: value.data.userAccountInfo.personalId,
+                inUserGroupId: value.data.userAccountInfo.userGroupId,
+                stTechnicianPersonalId:
+                    value.data.userAccountInfo.personalId.toString(),
+                stTechnicianName: value.data.userAccountInfo.personalName),
+          ),
+        );
+      },
+    );
   }
 }

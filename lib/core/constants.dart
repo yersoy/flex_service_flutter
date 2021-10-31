@@ -23,6 +23,9 @@ class Constants {
   static String getAllUserStateList = "/api/ServiceNew/GetAllUserStateList";
   static String searchInCustomer = "/api/ServiceNew/GetCustomerList";
 
+  static String getCustomerForm = "/api/ServiceNew/GetCustomerForm";
+  static String createNewService = "/api/ServiceNew/CreateNewService";
+
   static const primaryColor = Color(0xFF2697FF);
   static const secondaryColor = Color(0xFF2A2D3E);
   static const bgColor = Color(0xFF212332);

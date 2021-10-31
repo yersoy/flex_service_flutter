@@ -67,6 +67,7 @@ class Data {
 
 class UserAccountInfo {
   int userAccountId;
+  int inRecorderId;
   String email;
   String sessionId;
   int personalId;
@@ -84,6 +85,7 @@ class UserAccountInfo {
       this.sessionId,
       this.personalId,
       this.userGroupId,
+      this.inRecorderId,
       this.personalName,
       this.seeProductPrice,
       this.seeTeamStatus,
@@ -93,6 +95,7 @@ class UserAccountInfo {
 
   UserAccountInfo.fromJson(Map<String, dynamic> json) {
     userAccountId = json['UserAccountId'];
+    inRecorderId = json['InRecorderId'];
     email = json['Email'];
     sessionId = json['SessionId'];
     personalId = json['PersonalId'];
@@ -111,6 +114,7 @@ class UserAccountInfo {
     data['UserAccountId'] = this.userAccountId;
     data['Email'] = this.email;
     data['SessionId'] = this.sessionId;
+    data['InRecorderId'] = inRecorderId;
     data['PersonalId'] = this.personalId;
     data['UserGroupId'] = this.userGroupId;
     data['PersonalName'] = this.personalName;
