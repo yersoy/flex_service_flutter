@@ -24,22 +24,6 @@ class _NewServiceState extends State<NewService> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          setState(() {
-            loading = true;
-          });
-          Services.createNewService(
-                  context, forms.data, customerid, relevantname)
-              .then((value) {
-            Utils.showAuthedSnack(context, "Servis Başarıyla Eklendi");
-            setState(() {
-              loading = false;
-            });
-          });
-        },
-      ),
       appBar: AppBar(
         brightness: Brightness.light,
         iconTheme: IconThemeData(color: Color(0xFF1777F2)),
@@ -101,7 +85,7 @@ class _NewServiceState extends State<NewService> {
                     child: TextFormField(
                       decoration: InputDecoration(
                         icon: Icon(FontAwesomeIcons.user),
-                        hintText: "Firma İlgilisi",
+                        labelText: "Firma İlgilisi",
                       ),
                       onChanged: (String value) {
                         relevantname = value;
@@ -118,42 +102,12 @@ class _NewServiceState extends State<NewService> {
                           child: ListView.builder(
                             itemCount: form.total,
                             itemBuilder: (BuildContext context, int index) {
-                              // if (form.data[index].stColumnName ==
-                              //         "DtDeclarationTime" ||
-                              //     form.data[index].stColumnName ==
-                              //         "DtAppointmentTime") {
-                              //   return Container(
-                              //     padding: EdgeInsets.only(top: 15),
-                              //     child: DateTimePicker(
-                              //       dateMask: 'dd.MM.yyyy',
-                              //       decoration: InputDecoration(
-                              //         icon: Icon(Icons.date_range),
-                              //         hintText: form.data[index].stLabelText,
-                              //         labelText: form.data[index].stLabelText,
-                              //       ),
-                              //       firstDate: DateTime(2000),
-                              //       lastDate: DateTime(2100),
-                              //       dateLabelText: 'Date',
-                              //       onChanged: (val) {
-                              //         DateTime time = DateTime.parse(val);
-                              //         print(time.toUtc());
-                              //         form.data[index].stTextValue = time
-                              //             .toUtc()
-                              //             .toString()
-                              //             .replaceAll("Z", "");
-                              //         forms = form;
-                              //       },
-                              //     ),
-                              //   );
-                              // } else
                               if (form.data[index].stObjectType == "text") {
                                 return Container(
                                   padding: EdgeInsets.only(top: 15),
                                   child: TextFormField(
                                     decoration: InputDecoration(
                                       icon: Icon(Icons.text_fields),
-                                      hintText: form.data[index]
-                                          .stLabelTextShortInformation,
                                       labelText: form.data[index].stLabelText,
                                     ),
                                     onChanged: (String value) {
@@ -163,7 +117,7 @@ class _NewServiceState extends State<NewService> {
                                   ),
                                 );
                               } else {
-                                return null;
+                                return Container();
                               }
                             },
                           ),
@@ -171,6 +125,23 @@ class _NewServiceState extends State<NewService> {
                       }
                       return Container();
                     },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        loading = true;
+                      });
+                      Services.createNewService(
+                              context, forms.data, customerid, relevantname)
+                          .then((value) {
+                        Utils.showAuthedSnack(
+                            context, "Servis Başarıyla Eklendi");
+                        setState(() {
+                          loading = false;
+                        });
+                      });
+                    },
+                    child: Text("Yeni Servis Oluştur"),
                   ),
                 ],
               )

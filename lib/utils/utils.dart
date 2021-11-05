@@ -1,7 +1,8 @@
 import 'package:flexserviceflutter/core/localdb.dart';
-import 'package:flushbar/flushbar.dart';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:another_flushbar/flushbar.dart';
 
 class Utils {
   static void showAuthedSnack(BuildContext context, String message) {

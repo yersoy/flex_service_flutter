@@ -52,8 +52,8 @@ class _MainState extends State<Main> {
         inactiveColorPrimary: Colors.blueGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(FontAwesomeIcons.cogs),
-        title: ("Ayarlar"),
+        icon: Icon(FontAwesomeIcons.users),
+        title: ("Durum"),
         activeColorPrimary: Color(0xFF1777F2),
         inactiveColorPrimary: Colors.blueGrey,
       ),
