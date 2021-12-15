@@ -843,7 +843,7 @@ class ServiceStockList {
   String stockDate;
   String stockNo;
   String stockType;
-  List<StockActivityList> stockActivityList;
+  List<sStockActivityList> stockActivityList;
 
   ServiceStockList(
       {this.stockId,
@@ -858,9 +858,9 @@ class ServiceStockList {
     stockNo = json['StockNo'];
     stockType = json['StockType'];
     if (json['StockActivityList'] != null) {
-      stockActivityList = new List<StockActivityList>();
+      stockActivityList = new List<sStockActivityList>();
       json['StockActivityList'].forEach((v) {
-        stockActivityList.add(new StockActivityList.fromJson(v));
+        stockActivityList.add(new sStockActivityList.fromJson(v));
       });
     }
   }
@@ -879,7 +879,7 @@ class ServiceStockList {
   }
 }
 
-class StockActivityList {
+class sStockActivityList {
   int stockActivityId;
   int stockId;
   double quantity;
@@ -897,7 +897,7 @@ class StockActivityList {
   int notUsingProductCount;
   List<Null> productSerialNoList;
 
-  StockActivityList(
+  sStockActivityList(
       {this.stockActivityId,
       this.stockId,
       this.quantity,
@@ -915,7 +915,7 @@ class StockActivityList {
       this.notUsingProductCount,
       this.productSerialNoList});
 
-  StockActivityList.fromJson(Map<String, dynamic> json) {
+  sStockActivityList.fromJson(Map<String, dynamic> json) {
     stockActivityId = json['StockActivityId'];
     stockId = json['StockId'];
     quantity = json['Quantity'];

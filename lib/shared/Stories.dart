@@ -51,8 +51,7 @@ class _StoriesScreenState extends State<StoriesScreenPage> {
           borderRadius: BorderRadius.circular(15),
           image: DecorationImage(
               image: widget.first
-                  ? NetworkImage(
-                      "https://napsg.com/old/wp-content/uploads/2018/11/empty-photo.jpg")
+                  ? AssetImage("assets/images/camera.png")
                   : widget.StoryImage,
               fit: BoxFit.cover),
         ),

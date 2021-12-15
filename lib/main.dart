@@ -17,14 +17,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Ritma Service',
       theme: ThemeData(
-        primaryColor: Colors.blueGrey[800],
+        primaryColor: Color(0xff325fd5),
         textTheme: GoogleFonts.poppinsTextTheme(TextTheme(
-          headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          headline1: TextStyle(fontWeight: FontWeight.bold),
+          headline6: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           bodyText2: TextStyle(
             fontSize: 14.0,
           ),
-        )),
+        ),),
       ),
       onGenerateRoute: (RouteSettings settings) {
         switch (settings.name) {

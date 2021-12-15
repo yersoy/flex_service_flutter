@@ -45,9 +45,10 @@ class Authorization {
         Future.delayed(Duration(seconds: 1), () {
           Utils.showAuthedSnack(context, "Başarıyla Giriş Yapıldı!");
         });
+      } else {
+        print(value.body.toString());
+        Utils.showDefaultSnack(context, "Kullancı adı veya Şifre Yanlış");
       }
-      print(value.body.toString());
-      Utils.showDefaultSnack(context, "Kullancı adı veya Şifre Yanlış");
     });
   }
 }

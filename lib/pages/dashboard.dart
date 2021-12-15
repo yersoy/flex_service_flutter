@@ -268,24 +268,7 @@ class _DashboardState extends State<Dashboard>
                       ],
                     ),
                   ),
-                  SliverPersistentHeader(
-                    delegate: _SliverAppBarDelegate(
-                      TabBar(
-                        controller: _mainTabBarController,
-                        labelColor: Color(0xFF1777F2),
-                        unselectedLabelColor: Colors.grey,
-                        tabs: [
-                          Tab(
-                            text: "Servisler ",
-                          ),
-                          Tab(
-                            text: "Yüklemeyi Bekleyen ",
-                          ),
-                        ],
-                      ),
-                    ),
-                    pinned: true,
-                  ),
+         
                 ];
               },
               body: TabBarView(

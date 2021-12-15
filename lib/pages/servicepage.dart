@@ -119,46 +119,6 @@ class _ServicePageState extends State<ServicePage>
                 },
               ),
             ),
-          if (_controller.index == 3)
-            Container(
-              height: 40,
-              width: 40,
-              margin: const EdgeInsets.all(6.0),
-              decoration: BoxDecoration(
-                color: Color(0xFFe6eef5),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                icon: Icon(Icons.add),
-                iconSize: 24,
-                color: Colors.black,
-                onPressed: () async {
-                  final ImagePicker _picker = ImagePicker();
-                  final XFile image =
-                      await _picker.pickImage(source: ImageSource.gallery);
-                  int lenght = this.widget.data.servicePhotoList.length >= 0
-                      ? this.widget.data.servicePhotoList.length
-                      : 0;
-
-                  await image.readAsBytes().then((value) async {
-                    Uint8List idata = value;
-                    setState(() {
-                      this.widget.data.servicePhotoList.add(
-                            Photo(
-                                photoID: lenght,
-                                photoBase64Str: base64.encode(idata),
-                                photoExtension: ".jpg",
-                                photoFilePath: ""),
-                          );
-                    });
-
-                    await LocalDB.saveService(
-                        this.widget.data.serviceInfo.serviceId.toString(),
-                        this.widget.data);
-                  });
-                },
-              ),
-            ),
           SizedBox(
             width: 10,
           )
@@ -171,7 +131,7 @@ class _ServicePageState extends State<ServicePage>
           tabs: <Widget>[
             Tab(text: "Detay"),
             Tab(text: "Cihazlar"),
-            Tab(text: "Servis"),
+            Tab(text: "İşçilik / Malzeme"),
             Tab(text: "Fotoraflar"),
             Tab(text: "Onay"),
             Tab(text: "Önizleme"),

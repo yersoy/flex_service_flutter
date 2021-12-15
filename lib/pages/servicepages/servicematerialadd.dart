@@ -39,10 +39,51 @@ class _MaterialAddState extends State<MaterialAdd>
 
     rFuture = Services.getPfromInvoice(
         searchString, this.widget.data.customerInfo.customerId);
-    _controller = TabController(length: 3, vsync: this);
+    _controller = TabController(length: 2, vsync: this);
+  }
+
+  void addProduct(ServiceProductList product, String quantity) {
+    product.productCount = int.parse(quantity);
+    this.widget.data.serviceProductList.add(product);
+    LocalDB.saveService(
+            this.widget.data.serviceInfo.serviceId.toString(), this.widget.data)
+        .then((value) {
+      Navigator.of(context).pop();
+      Utils.showAuthedSnack(
+          context, product.productName + " Başarıyla Eklendi");
+    });
+  }
+
+  void addProductFromPersonel(StockActivityList stock, String count) {
+    ServiceProductList product = new ServiceProductList(
+      productId: stock.productId,
+      quantity: double.parse(count),
+      productCount: int.parse(count),
+      productName: stock.productName,
+      productSalePrice: stock.productSalePrice,
+      productStrSalePrice: stock.productStrSalePrice,
+      productKdvRate: stock.productKdvRate,
+      productCode: stock.productCode,
+      hasSerialNo: stock.hasSerialNo,
+      currencyDecimalPlaces: stock.currencyDecimalPlaces,
+      productCurrencySymbol: stock.productCurrencySymbol,
+      productSaleMoneyType: stock.productSaleMoneyType,
+    );
+
+    setState(() {
+      this.widget.data.serviceProductList.add(product);
+    });
+    LocalDB.saveService(
+            this.widget.data.serviceInfo.serviceId.toString(), this.widget.data)
+        .then((value) {
+      Utils.showAuthedSnack(context, stock.productName + " Başarıyla Eklendi");
+      Navigator.of(context).pop();
+    });
   }
 
   Widget listProductTile(ServiceProductList product) {
+    TextEditingController pnumberController =
+        new TextEditingController(text: "1");
     return ListTile(
       title: Text(product.productName),
       trailing: TextButton(
@@ -51,36 +92,28 @@ class _MaterialAddState extends State<MaterialAdd>
           showDialog(
             context: context,
             builder: (_) => AlertDialog(
-              content: Wrap(
-                children: [
-                  Text(
-                    product.productName,
-                    overflow: TextOverflow.ellipsis,
+              content: ListTile(
+                title: TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: pnumberController,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  ],
+                  onFieldSubmitted: (text) {
+                    addProduct(product, text);
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(8),
+                    border: OutlineInputBorder(),
+                    hintText: "Adet Giriniz",
+                    labelText: 'Adet Giriniz',
                   ),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    ],
-                    onFieldSubmitted: (text) {
-                      product.quantity = double.parse(text);
-                      this.widget.data.serviceProductList.add(product);
-                      LocalDB.saveService(
-                              this.widget.data.serviceInfo.serviceId.toString(),
-                              this.widget.data)
-                          .then((value) {
-                        Utils.showAuthedSnack(context,
-                            product.productName + " Başarıyla Eklendi");
-                        Navigator.of(context).pop();
-                      });
+                ),
+                trailing: TextButton(
+                    onPressed: () {
+                      addProduct(product, pnumberController.text);
                     },
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(8),
-                      border: OutlineInputBorder(),
-                      labelText: 'Adet Seçiniz',
-                    ),
-                  )
-                ],
+                    child: Text("Ekle")),
               ),
             ),
           );
@@ -90,6 +123,8 @@ class _MaterialAddState extends State<MaterialAdd>
   }
 
   Widget listStockTile(StockList stocks) {
+    TextEditingController pnumberController =
+        new TextEditingController(text: "1");
     return Card(
       child: Column(
         children: [
@@ -109,66 +144,26 @@ class _MaterialAddState extends State<MaterialAdd>
                   showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                      content: Wrap(
-                        children: [
-                          Text(
-                            stock.productName,
-                            overflow: TextOverflow.ellipsis,
+                      content: ListTile(
+                        title: TextFormField(
+                          controller: pnumberController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                          ],
+                          onFieldSubmitted: (text) {},
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8),
+                            border: OutlineInputBorder(),
+                            labelText: 'Adet Seçiniz',
                           ),
-                          TextFormField(
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]')),
-                            ],
-                            onFieldSubmitted: (text) {
-                              ServiceProductList product =
-                                  new ServiceProductList(
-                                productId: stock.productId,
-                                quantity: double.parse(text),
-                                productCount: int.parse(text),
-                                productName: stock.productName,
-                                productSalePrice: stock.productSalePrice,
-                                productStrSalePrice: stock.productStrSalePrice,
-                                productKdvRate: stock.productKdvRate,
-                                productCode: stock.productCode,
-                                hasSerialNo: stock.hasSerialNo,
-                                currencyDecimalPlaces:
-                                    stock.currencyDecimalPlaces,
-                                productCurrencySymbol:
-                                    stock.productCurrencySymbol,
-                                productSaleMoneyType:
-                                    stock.productSaleMoneyType,
-                              );
-
-                              setState(() {
-                                this
-                                    .widget
-                                    .data
-                                    .serviceProductList
-                                    .add(product);
-                              });
-                              LocalDB.saveService(
-                                      this
-                                          .widget
-                                          .data
-                                          .serviceInfo
-                                          .serviceId
-                                          .toString(),
-                                      this.widget.data)
-                                  .then((value) {
-                                Utils.showAuthedSnack(context,
-                                    stock.productName + " Başarıyla Eklendi");
-                                Navigator.of(context).pop();
-                              });
+                        ),
+                        trailing: TextButton(
+                            onPressed: () {
+                              addProductFromPersonel(
+                                  stock, pnumberController.text);
                             },
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8),
-                              border: OutlineInputBorder(),
-                              labelText: 'Adet Seçiniz',
-                            ),
-                          )
-                        ],
+                            child: Text("Ekle")),
                       ),
                     ),
                   );
@@ -190,9 +185,12 @@ class _MaterialAddState extends State<MaterialAdd>
             // Tab index when user select it, it start from zero
           },
           tabs: [
-            Tab(icon: Icon(FontAwesomeIcons.list)),
-            Tab(icon: Icon(FontAwesomeIcons.fileInvoice)),
-            Tab(icon: Icon(FontAwesomeIcons.user)),
+            Tab(
+              text: "Listeden",
+            ),
+            Tab(
+              text: "Personelden",
+            ),
           ],
         ),
         title: Text("Yeni İşçilik & Malzeme"),
@@ -215,8 +213,8 @@ class _MaterialAddState extends State<MaterialAdd>
                   searchString = text;
                   lFuture = Services.getPfromList(searchString);
                   mFuture = Services.getPfromPersonel(searchString);
-                  rFuture = Services.getPfromInvoice(
-                      searchString, this.widget.data.customerInfo.customerId);
+                  // rFuture = Services.getPfromInvoice(
+                  //     searchString, this.widget.data.customerInfo.customerId);
                 });
               },
             ),
@@ -335,63 +333,63 @@ class _MaterialAddState extends State<MaterialAdd>
                     },
                   ),
                 ),
-                Container(
-                  child: FutureBuilder<ProductfromInvoice>(
-                    future: rFuture,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<ProductfromInvoice> snapshot) {
-                      if (snapshot.hasData &&
-                          snapshot.data.data.stockList != null) {
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: snapshot.data.data.stockList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return listStockTile(
-                                  snapshot.data.data.stockList[index]);
-                            });
-                      } else if (snapshot.hasError) {
-                        return Column(
-                          children: <Widget>[
-                            const Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                              size: 60,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Text('Error: ${snapshot.error}'),
-                            )
-                          ],
-                        );
-                      } else if (snapshot.hasData) {
-                        return ListTile(
-                          title: Text(
-                            "Ürün Bulunamadı",
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      }
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              child: CircularProgressIndicator(),
-                              width: 60,
-                              height: 60,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 16),
-                              child: Text('Awaiting result...'),
-                            )
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                // Container(
+                //   child: FutureBuilder<ProductfromInvoice>(
+                //     future: rFuture,
+                //     builder: (BuildContext context,
+                //         AsyncSnapshot<ProductfromInvoice> snapshot) {
+                //       if (snapshot.hasData &&
+                //           snapshot.data.data.stockList != null) {
+                //         return ListView.builder(
+                //             shrinkWrap: true,
+                //             padding: const EdgeInsets.all(8),
+                //             itemCount: snapshot.data.data.stockList.length,
+                //             itemBuilder: (BuildContext context, int index) {
+                //               return listStockTile(
+                //                   snapshot.data.data.stockList[index]);
+                //             });
+                //       } else if (snapshot.hasError) {
+                //         return Column(
+                //           children: <Widget>[
+                //             const Icon(
+                //               Icons.error_outline,
+                //               color: Colors.red,
+                //               size: 60,
+                //             ),
+                //             Padding(
+                //               padding: const EdgeInsets.only(top: 16),
+                //               child: Text('Error: ${snapshot.error}'),
+                //             )
+                //           ],
+                //         );
+                //       } else if (snapshot.hasData) {
+                //         return ListTile(
+                //           title: Text(
+                //             "Ürün Bulunamadı",
+                //             textAlign: TextAlign.center,
+                //           ),
+                //         );
+                //       }
+                //       return Center(
+                //         child: Column(
+                //           mainAxisAlignment: MainAxisAlignment.center,
+                //           crossAxisAlignment: CrossAxisAlignment.center,
+                //           children: <Widget>[
+                //             SizedBox(
+                //               child: CircularProgressIndicator(),
+                //               width: 60,
+                //               height: 60,
+                //             ),
+                //             Padding(
+                //               padding: EdgeInsets.only(top: 16),
+                //               child: Text('Awaiting result...'),
+                //             )
+                //           ],
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ),
